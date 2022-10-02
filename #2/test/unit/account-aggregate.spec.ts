@@ -1,5 +1,5 @@
 import { assert, expect } from 'chai';
-import { AccountEvents, AggregateType, Event } from '../../src/events';
+import { AccountEvents, AggregateType, Event } from '../../../events';
 import { AccountNotFoundError, InsufficientFundError } from '../../src/library/errors';
 import EventStore from '../../src/library/eventstore';
 

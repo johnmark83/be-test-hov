@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { AccountEvents, AggregateType, Event } from '../../src/events';
+import { AccountEvents, AggregateType, Event } from '../../../events';
 import EventStore from '../../src/library/eventstore';
 
 describe('EventStore', function() {

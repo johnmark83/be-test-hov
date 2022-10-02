@@ -1,4 +1,4 @@
-import { AccountCreatedEvent, AccountUpdatedEvent, AggregateType, CreditedEvent, DebitEvent } from '../events';
+import { AccountCreatedEvent, AccountUpdatedEvent, AggregateType, CreditedEvent, DebitEvent } from '../../../events';
 import EventStore from '../library/eventstore';
 import Aggregate from '../library/aggregate';
 

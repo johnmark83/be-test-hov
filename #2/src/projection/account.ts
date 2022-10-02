@@ -1,4 +1,4 @@
-import { AggregateType, Event } from '../events';
+import { AggregateType, Event } from '../../../events';
 import EventStore from '../library/eventstore';
 import Projection from '../library/projection';
 

@@ -2,7 +2,7 @@ import waitForExpect from 'wait-for-expect';
 
 import AccountProjection from '../../src/projection/account';
 
-import { AccountEvents, AggregateType } from '../../src/events';
+import { AccountEvents, AggregateType } from '../../../events';
 import EventStore from '../../src/library/eventstore';
 import { expect } from 'chai';
 

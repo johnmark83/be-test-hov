@@ -7,5 +7,5 @@
   "require": [
     "ts-node/register/transpile-only"
   ],
-  "spec": "test/**/*.spec.ts"
+  "spec": "**/*.spec.ts"
 }

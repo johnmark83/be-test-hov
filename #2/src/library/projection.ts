@@ -1,7 +1,7 @@
 import Queue from 'p-queue';
 import EventEmitter from 'events';
 
-import { AggregateType, Event } from '../events';
+import { AggregateType, Event } from '../../../events';
 import EventStore from './eventstore';
 
 /**
