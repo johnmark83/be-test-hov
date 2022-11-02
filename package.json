@@ -11,10 +11,12 @@
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^5.2.7",
     "@types/node": "^15.0.1",
     "@types/sinon": "^9.0.9",
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "mocha": "^8.2.1",
     "sinon": "^9.2.1",
     "ts-node": "^7.0.1",

@@ -1,9 +1,11 @@
-import { assert, expect } from 'chai';
+import chai, { assert, expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { AccountEvents, AggregateType, Event } from '../../../events';
 import { AccountNotFoundError, InsufficientFundError } from '../../src/library/errors';
 import EventStore from '../../src/library/eventstore';
-
 import AccountAggregate from '../../src/aggregate/account';
+
+chai.use(chaiAsPromised);
 
 describe('AccountAggregate', function () {
   beforeEach(function () {
@@ -65,7 +67,7 @@ describe('AccountAggregate', function () {
 
   describe('#createAccount', function () {
     describe('GIVEN account already exists', function () {
-      it('SHOULD throw AccountAlreadyExistsError', function () {
+      it('SHOULD throw AccountAlreadyExistsError', async function () {
         expect(() => AccountAggregate.createAccount(
           'd5dedb98-1894-4cf5-9b42-edb755b16f04',
           {
@@ -75,7 +77,7 @@ describe('AccountAggregate', function () {
             username: 'cherryp',
           },
           this.eventStore,
-        ));
+        )).to.be.rejected;
       });
     });
 
