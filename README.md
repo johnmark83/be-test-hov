@@ -13,9 +13,7 @@ Each event has the following properties:
 
   * When type is `AccountCreated` with `body: { username: 'johndoe' }`, it means that there is an account that was created with a username `johndoe`.
 
-Clone this repository into a personal private repository in Github and add @djansyle as collaborator of the repository. Implement all functions/method that has a TODO.
-Aim to pass all the test scenarios.
-
+Clone this repository into a personal private repository in Github and add @djansyle as collaborator of the repository. Implement all functions/method that has a TODO. Aim to pass all the test scenarios.
 
 **Environment:**
 
@@ -24,3 +22,17 @@ OS: **Linux**
 Node: **v12.18.2**
 
 NPM: **6.14.5**
+
+## Exercises
+Implement the following methods/functions and make the `npm test` pass without modifying the test files.
+
+`./#1/src/index.ts`
+* calculateAccountBalance
+* getAccountInformation
+
+`./#2/src/aggregate/account.ts`
+* apply
+
+`./#2/src/projection/account.ts`
+* apply
+
