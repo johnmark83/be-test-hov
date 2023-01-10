@@ -2,6 +2,7 @@ import chai, { assert, expect } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { AccountEvents, AggregateType, Event } from '../../../events';
 import { AccountNotFoundError, InsufficientFundError } from '../../src/library/errors';
+import { AccountAlreadyExistsError } from '../../src/library/errors';
 import EventStore from '../../src/library/eventstore';
 import AccountAggregate from '../../src/aggregate/account';
 
@@ -77,7 +78,7 @@ describe('AccountAggregate', function () {
             username: 'cherryp',
           },
           this.eventStore,
-        )).to.be.rejected;
+        )).to.be.throw(AccountAlreadyExistsError);
       });
     });
 
