@@ -39,7 +39,7 @@ describe('AccountProjection', function () {
         username: 'jdoe',
         fullName: 'johndoe',
         email: 'email@ml.com',
-        balance: 27,
+        balance: 23,
         totalApprovedWithdrawalAmount: 3,
         totalApprovedDepositAmount: 10,
       });
