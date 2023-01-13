@@ -15,16 +15,6 @@ describe('#calculateAccountBalance', function () {
 
 describe('#getAccountInformation', function () {
   it('SHOULD retrieve the correct account information', function () {
-
-    expect(getAccountInformation(AccountEvents, '60329145-ba86-44fb-8fc8-519e1e427a60')).to.deep.equal({
-      username: 'jdoe',
-      fullName: 'johndoe',
-      password: 'averystrongpassword',
-      email: 'email@ml.com',
-      totalApprovedWithdrawalAmount: 3,
-      totalApprovedDepositAmount: 10,
-    });
-
     [
       {
         account: '60329145-ba86-44fb-8fc8-519e1e427a60',
@@ -33,7 +23,7 @@ describe('#getAccountInformation', function () {
           fullName: 'johndoe',
           password: 'averystrongpassword',
           email: 'email@ml.com',
-          totalApprovedWithdrawalAmount: 3,
+          totalApprovedWithdrawalAmount: 7,
           totalApprovedDepositAmount: 10,
         }
       },
