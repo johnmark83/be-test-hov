@@ -1,6 +1,7 @@
 import { AccountCreatedEvent, AccountUpdatedEvent, AggregateType, CreditedEvent, DebitEvent } from '../../../events';
 import EventStore from '../library/eventstore';
 import Aggregate from '../library/aggregate';
+import { AccountAlreadyExistsError, AccountNotFoundError, InsufficientFundError } from '../library/errors';
 
 export type Account = {
   username: string;
@@ -26,7 +27,7 @@ export default class AccountAggregate extends Aggregate<AccountState> {
     return AggregateType.Account;
   }
 
-  constructor (id: string, eventStore: EventStore) {
+  constructor(id: string, eventStore: EventStore) {
     super(id, null, eventStore);
   }
 
@@ -37,28 +38,57 @@ export default class AccountAggregate extends Aggregate<AccountState> {
    * @returns 
    */
   protected apply(event: AccountAggregateEvents): AccountState {
-    // TODO: Implement this method
 
-    return null;
+    let aggregateFunction = {
+      "AccountCreated": () => {
+        this._state = (body => (
+          { ...body, balance: 0 } as AccountState)
+        )((event as AccountCreatedEvent).body);
+      },
+      "AccountUpdated": () => {
+        Object.keys(event.body).forEach(key => {
+          this._state![key] = (event as AccountUpdatedEvent).body[key];
+        });
+      },
+      "BalanceCredited": () => {
+        this._state!.balance += (event as CreditedEvent).body.amount;
+      },
+      "BalanceDebited": () => {
+        this._state!.balance -= (event as DebitEvent).body.amount;
+      },
+    }
+
+    if (aggregateFunction[event.type]) aggregateFunction[event.type]();
+
+    return this._state;
   }
- 
+
   public static createAccount(id: string, info: Omit<Account, 'balance'>, eventStore: EventStore) {
     const account = this.findById(id, eventStore);
+    if (account.version > 0) throw new AccountAlreadyExistsError(id);
+
     account.createEvent('AccountCreated', info);
     return id;
   }
 
   public updateAccount(info: Partial<Omit<Account, 'balance'>>) {
+    if (!this._state) throw new AccountNotFoundError(this.id);
+    
     this.createEvent('AccountUpdated', info);
     return true;
   }
 
   public creditBalance(amount: number) {
+    if (!this._state) throw new AccountNotFoundError(this.id);
+
     this.createEvent('BalanceCredited', { amount });
     return true;
   }
 
   public debitBalance(amount: number) {
+    if (!this._state) throw new AccountNotFoundError(this.id);
+    if (this._state.balance < amount) throw new InsufficientFundError(this.id);
+
     this.createEvent('BalanceDebited', { amount });
     return true;
   }
