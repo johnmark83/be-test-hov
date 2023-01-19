@@ -25,42 +25,45 @@ export function getAccountInformation(events: typeof AccountEvents, accountId: s
   let withdrawalsCreated: Array<Event> = new Array<Event>();
 
   const accountInformation: AccountInformation | null = events.reduce((acc: AccountInformation | null, curr: Event) => {
-    switch (curr.type) {
-      case "AccountCreated":
-        if (curr.aggregateId !== accountId) break;
-        acc = ((body) => (
+
+    let aggregateFunction = {
+      "AccountCreated": function () {
+        if (curr.aggregateId !== accountId) return;
+        acc = (body => (
           {
             ...body,
             totalApprovedDepositAmount: 0,
             totalApprovedWithdrawalAmount: 0
           } as AccountInformation)
         )(curr.body);
-        break;
-      case "AccountUpdated":
-        if (acc === null || curr.aggregateId !== accountId) break;
+      },
+      "AccountUpdated": function () {
+        if (acc === null || curr.aggregateId !== accountId) return;
         Object.keys(curr.body).forEach(key => {
           acc![key] = curr.body[key];
         });
-        break;
-      case "WithdrawalCreated":
+      },
+      "WithdrawalCreated": function () {
         withdrawalsCreated.push(curr);
-        break;
-      case "DepositCreated":
+      },
+      "DepositCreated": function () {
         depositsCreated.push(curr);
-        break;
-      case "WithdrawalApproved":
+      },
+      "WithdrawalApproved": function () {
         const withdrawalCreated: Event | undefined = withdrawalsCreated.find(withdrawal => withdrawal.aggregateId === curr.aggregateId);
-        if (withdrawalCreated && withdrawalCreated.body.amount && acc) acc.totalApprovedWithdrawalAmount += withdrawalCreated.body.amount ?? 0;
-        break;
-      case "DepositApproved":
+        if (withdrawalCreated && acc) acc.totalApprovedWithdrawalAmount += withdrawalCreated.body.amount ?? 0;
+      },
+      "DepositApproved": function () {
         const depositCreated: Event | undefined = depositsCreated.find(deposit => deposit.aggregateId === curr.aggregateId);
-        if (depositCreated && depositCreated.body.amount && acc) acc.totalApprovedDepositAmount += depositCreated.body.amount ?? 0;
-        break;
-      default:
-        break;
+        if (depositCreated && acc) acc.totalApprovedDepositAmount += depositCreated.body.amount ?? 0;
+      }
     }
 
+    if (aggregateFunction[curr.type]) aggregateFunction[curr.type]();
+
     return acc;
+
   }, null);
+
   return accountInformation;
 }
