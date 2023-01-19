@@ -29,13 +29,14 @@ export function getAccountInformation(events: typeof AccountEvents, accountId: s
     let aggregateFunction = {
       "AccountCreated": () => {
         if (curr.aggregateId !== accountId) return;
-        acc = (body => (
-          {
-            ...body,
-            totalApprovedDepositAmount: 0,
-            totalApprovedWithdrawalAmount: 0
-          } as AccountInformation)
-        )(curr.body);
+        acc = {
+          email: curr.body.email ?? "",
+          fullName: curr.body.fullName ?? "",
+          password: curr.body.password ?? "",
+          username: curr.body.username ?? "",
+          totalApprovedDepositAmount: 0,
+          totalApprovedWithdrawalAmount: 0
+        };
       },
       "AccountUpdated": () => {
         if (acc === null || curr.aggregateId !== accountId) return;
