@@ -12,7 +12,7 @@ export function calculateAccountBalance(events: typeof AccountEvents, accountId:
   }, 0);
 
   const totalDebit: number = events.reduce((acc, curr) => {
-    if (_isIdAndTypeEqual(accountId, "BalanceDeposited", curr.aggregateId, curr.type)) return acc += curr.body.amount ?? 0;
+    if (_isIdAndTypeEqual(accountId, "BalanceDebited", curr.aggregateId, curr.type)) return acc += curr.body.amount ?? 0;
 
     return acc;
   }, 0);
