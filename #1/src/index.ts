@@ -1,19 +1,17 @@
-import { AccountEvents } from '../../events';
+import { AccountEvents, AggregateType } from '../../events';
+import { Event } from './types';
 
 export function calculateAccountBalance(events: typeof AccountEvents, accountId: string): number {
 
-  const totalBalance: number = events.reduce((acc, curr) => {
+  const totalBalance: number = events.reduce((acc: number, curr: Event) => {
     if (accountId !== curr.aggregateId) return acc;
 
-    switch (curr.type) {
-      case "BalanceCredited":
-        acc += curr.body.amount ?? 0;
-        break;
-      case "BalanceDebited":
-        acc -= curr.body.amount ?? 0;
-        break;
-      default:
-        break;
+    if (curr.type === "BalanceCredited") {
+      acc += curr.body.amount ?? 0;
+    }
+
+    if (curr.type === "BalanceDebited") {
+      acc -= curr.body.amount ?? 0;
     }
 
     return acc;
@@ -23,6 +21,5 @@ export function calculateAccountBalance(events: typeof AccountEvents, accountId:
 }
 
 export function getAccountInformation(events: typeof AccountEvents, accountId: string) {
-
   return {};
 }
