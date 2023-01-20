@@ -50,9 +50,13 @@ describe('AccountProjection', function () {
     });
 
     after(async function () {
-      await collections.depositsCreated?.deleteMany({});
-      await collections.withdrawalsCreated?.deleteMany({});
-      await collections.accounts?.deleteMany({});
+      try {
+        await collections.depositsCreated?.deleteMany({});
+        await collections.withdrawalsCreated?.deleteMany({});
+        await collections.accounts?.deleteMany({});
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     it('SHOULD project the data to the correctly to the database', function () {
