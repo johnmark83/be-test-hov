@@ -1,9 +1,9 @@
 import { AccountEvents } from '../../events';
-import { AccountInformation, Event } from './types';
+import { IAccountInformation, IEvent } from './types';
 
 export function calculateAccountBalance(events: typeof AccountEvents, accountId: string): number {
 
-  const totalBalance: number = events.reduce((acc: number, curr: Event) => {
+  const totalBalance: number = events.reduce((acc: number, curr: IEvent) => {
     if (accountId !== curr.aggregateId) return acc;
 
     if (curr.type === "BalanceCredited") {
@@ -21,10 +21,10 @@ export function calculateAccountBalance(events: typeof AccountEvents, accountId:
 }
 
 export function getAccountInformation(events: typeof AccountEvents, accountId: string) {
-  let depositsCreated: Array<Event> = new Array<Event>();
-  let withdrawalsCreated: Array<Event> = new Array<Event>();
+  let depositsCreated: Array<IEvent> = new Array<IEvent>();
+  let withdrawalsCreated: Array<IEvent> = new Array<IEvent>();
 
-  const accountInformation: AccountInformation | null = events.reduce((acc: AccountInformation | null, curr: Event) => {
+  const accountInformation: IAccountInformation | null = events.reduce((acc: IAccountInformation | null, curr: IEvent) => {
 
     let aggregateFunction = {
       "AccountCreated": () => {
@@ -51,11 +51,11 @@ export function getAccountInformation(events: typeof AccountEvents, accountId: s
         depositsCreated.push(curr);
       },
       "WithdrawalApproved": () => {
-        const withdrawalCreated: Event | undefined = withdrawalsCreated.find(withdrawal => withdrawal.aggregateId === curr.aggregateId);
+        const withdrawalCreated: IEvent | undefined = withdrawalsCreated.find(withdrawal => withdrawal.aggregateId === curr.aggregateId);
         if (withdrawalCreated && acc) acc.totalApprovedWithdrawalAmount += withdrawalCreated.body.amount ?? 0;
       },
       "DepositApproved": () => {
-        const depositCreated: Event | undefined = depositsCreated.find(deposit => deposit.aggregateId === curr.aggregateId);
+        const depositCreated: IEvent | undefined = depositsCreated.find(deposit => deposit.aggregateId === curr.aggregateId);
         if (depositCreated && acc) acc.totalApprovedDepositAmount += depositCreated.body.amount ?? 0;
       }
     }

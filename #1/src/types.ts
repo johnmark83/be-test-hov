@@ -1,23 +1,25 @@
 import { AggregateType } from "../../events";
 
-export interface AccountInformation {
+export interface IUserCredentials {
     email: string;
     fullName: string;
     password: string;
     username: string;
+}
+export interface IAccountInformation extends IUserCredentials {
     totalApprovedDepositAmount: number | 0;
     totalApprovedWithdrawalAmount: number | 0;
 }
 
-export interface Event {
+export interface IEvent {
     aggregateId: string;
     aggregateType: AggregateType,
     type: string,
     version: number,
-    body: EventBody
+    body: IEventBody
 }
 
-export interface EventBody {
+export interface IEventBody {
     username?: string,
     fullName?: string,
     password?: string,
