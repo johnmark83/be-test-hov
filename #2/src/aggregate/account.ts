@@ -40,25 +40,48 @@ export default class AccountAggregate extends Aggregate<AccountState> {
   protected apply(event: AccountAggregateEvents): AccountState {
 
     let aggregateFunction = {
-      "AccountCreated": () => {
+      "AccountCreated": (event : AccountCreatedEvent) => {
         this._state = (body => (
           { ...body, balance: 0 } as AccountState)
-        )((event as AccountCreatedEvent).body);
+        )(event.body);
       },
-      "AccountUpdated": () => {
+      "AccountUpdated": (event : AccountUpdatedEvent) => {
         Object.keys(event.body).forEach(key => {
-          this._state![key] = (event as AccountUpdatedEvent).body[key];
+          this._state![key] = event.body[key];
         });
       },
-      "BalanceCredited": () => {
-        this._state!.balance += (event as CreditedEvent).body.amount;
+      "BalanceCredited": (event : CreditedEvent) => {
+        this._state!.balance += event.body.amount;
       },
-      "BalanceDebited": () => {
-        this._state!.balance -= (event as DebitEvent).body.amount;
+      "BalanceDebited": (event : DebitEvent) => {
+        this._state!.balance -= event.body.amount;
       },
+    };
+
+    const isAccountCreatedEvent = (event : AccountAggregateEvents) : event is AccountCreatedEvent => {
+      return event.type === "AccountCreated";
     }
 
-    if (aggregateFunction[event.type]) aggregateFunction[event.type]();
+    const isAccountUpdatedEvent = (event : AccountAggregateEvents) : event is AccountUpdatedEvent => {
+      return event.type === "AccountUpdated";
+    }
+
+    const isCreditEvent = (event : AccountAggregateEvents) : event is CreditedEvent => {
+      return event.type === "BalanceCredited";
+    }
+
+    const isDebitEvent = (event : AccountAggregateEvents) : event is DebitEvent => {
+      return event.type === "BalanceDebited";
+    }
+
+    function handleEventType (event: AccountAggregateEvents) {
+      if (isAccountCreatedEvent(event)) aggregateFunction[event.type](event);
+      if (isAccountUpdatedEvent(event)) aggregateFunction[event.type](event);
+      if (isCreditEvent(event)) aggregateFunction[event.type](event);
+      if (isDebitEvent(event)) aggregateFunction[event.type](event);
+    }
+
+    handleEventType(event);
 
     return this._state;
   }
