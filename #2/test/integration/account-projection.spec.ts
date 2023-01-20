@@ -5,8 +5,9 @@ import AccountProjection from '../../src/projection/account';
 import { AccountEvents, AggregateType } from '../../../events';
 import EventStore from '../../src/library/eventstore';
 import { expect } from 'chai';
-import { connectToDatabase } from '../../src/services/database';
-
+import { collections, connectToDatabase } from '../../src/services/database';
+import { ObjectId } from 'mongodb';
+import { AccountModel } from '../../src/models/AccountModel';
 
 async function findById(id: string): Promise<{
   username: string;
@@ -14,8 +15,15 @@ async function findById(id: string): Promise<{
   email: string;
   balance: number;
 } | null> {
-  // TODO: Implement this function to retrieve the account information by account id.
 
+  try {
+    const query = { _id: new ObjectId(id) };
+    const account = (await collections.accounts?.findOne(query)) as AccountModel | null | undefined;
+
+    if (account) return account;
+  } catch (error) {
+    console.log(`Unable to find matching document with id: ${id}`);
+  }
   return null;
 }
 
@@ -32,8 +40,8 @@ describe('AccountProjection', function () {
       this.account = await findById(this.aggregateId);
     });
 
-    after(function () {
-      // TODO: Destroy test data/models
+    after(async function () {
+      await collections.accounts?.deleteMany({});
     });
 
     it('SHOULD project the data to the correctly to the database', function () {
