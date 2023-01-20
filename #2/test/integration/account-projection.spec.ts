@@ -14,15 +14,24 @@ async function findById(id: string): Promise<{
   fullName: string;
   email: string;
   balance: number;
+  totalApprovedDepositAmount: number;
+  totalApprovedWithdrawalAmount: number;
 } | null> {
 
   try {
-    const query = { _id: new ObjectId(id) };
+    const query = { aggregateId: id };
     const account = (await collections.accounts?.findOne(query)) as AccountModel | null | undefined;
 
-    if (account) return account;
+    if (account) return {
+      username: account.username,
+      fullName: account.fullName,
+      email: account.email,
+      balance: account.balance,
+      totalApprovedDepositAmount: account.totalApprovedDepositAmount,
+      totalApprovedWithdrawalAmount: account.totalApprovedWithdrawalAmount
+    };
   } catch (error) {
-    console.log(`Unable to find matching document with id: ${id}`);
+    console.error(`Unable to find matching document with id: ${id}`);
   }
   return null;
 }
