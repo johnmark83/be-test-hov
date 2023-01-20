@@ -62,7 +62,6 @@ export function getAccountInformation(events: typeof AccountEvents, accountId: s
     if (aggregateFunction[curr.type]) aggregateFunction[curr.type]();
 
     return acc;
-
   }, null);
 
   return accountInformation;

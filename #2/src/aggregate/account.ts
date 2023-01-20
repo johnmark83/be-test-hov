@@ -37,51 +37,47 @@ export default class AccountAggregate extends Aggregate<AccountState> {
    * @param event 
    * @returns 
    */
+  private _isAccountCreatedEvent(event: AccountAggregateEvents): event is AccountCreatedEvent {
+    return event.type === "AccountCreated";
+  }
+
+  private _isAccountUpdatedEvent(event: AccountAggregateEvents): event is AccountUpdatedEvent {
+    return event.type === "AccountUpdated";
+  }
+
+  private _isCreditEvent(event: AccountAggregateEvents): event is CreditedEvent {
+    return event.type === "BalanceCredited";
+  }
+
+  private _isDebitEvent(event: AccountAggregateEvents): event is DebitEvent {
+    return event.type === "BalanceDebited";
+  }
+
   protected apply(event: AccountAggregateEvents): AccountState {
 
     let aggregateFunction = {
-      "AccountCreated": (event : AccountCreatedEvent) => {
+      "AccountCreated": (event: AccountCreatedEvent) => {
         this._state = (body => (
           { ...body, balance: 0 } as AccountState)
         )(event.body);
       },
-      "AccountUpdated": (event : AccountUpdatedEvent) => {
+      "AccountUpdated": (event: AccountUpdatedEvent) => {
         Object.keys(event.body).forEach(key => {
           this._state![key] = event.body[key];
         });
       },
-      "BalanceCredited": (event : CreditedEvent) => {
+      "BalanceCredited": (event: CreditedEvent) => {
         this._state!.balance += event.body.amount;
       },
-      "BalanceDebited": (event : DebitEvent) => {
+      "BalanceDebited": (event: DebitEvent) => {
         this._state!.balance -= event.body.amount;
       },
     };
 
-    const isAccountCreatedEvent = (event : AccountAggregateEvents) : event is AccountCreatedEvent => {
-      return event.type === "AccountCreated";
-    }
-
-    const isAccountUpdatedEvent = (event : AccountAggregateEvents) : event is AccountUpdatedEvent => {
-      return event.type === "AccountUpdated";
-    }
-
-    const isCreditEvent = (event : AccountAggregateEvents) : event is CreditedEvent => {
-      return event.type === "BalanceCredited";
-    }
-
-    const isDebitEvent = (event : AccountAggregateEvents) : event is DebitEvent => {
-      return event.type === "BalanceDebited";
-    }
-
-    function handleEventType (event: AccountAggregateEvents) {
-      if (isAccountCreatedEvent(event)) aggregateFunction[event.type](event);
-      if (isAccountUpdatedEvent(event)) aggregateFunction[event.type](event);
-      if (isCreditEvent(event)) aggregateFunction[event.type](event);
-      if (isDebitEvent(event)) aggregateFunction[event.type](event);
-    }
-
-    handleEventType(event);
+    if (this._isAccountCreatedEvent(event)) aggregateFunction[event.type](event);
+    if (this._isAccountUpdatedEvent(event)) aggregateFunction[event.type](event);
+    if (this._isCreditEvent(event)) aggregateFunction[event.type](event);
+    if (this._isDebitEvent(event)) aggregateFunction[event.type](event);
 
     return this._state;
   }
@@ -96,7 +92,7 @@ export default class AccountAggregate extends Aggregate<AccountState> {
 
   public updateAccount(info: Partial<Omit<Account, 'balance'>>) {
     if (!this._state) throw new AccountNotFoundError(this.id);
-    
+
     this.createEvent('AccountUpdated', info);
     return true;
   }
