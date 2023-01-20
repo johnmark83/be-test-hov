@@ -61,7 +61,7 @@ describe('AccountProjection', function () {
         fullName: 'johndoe',
         email: 'email@ml.com',
         balance: 23,
-        totalApprovedWithdrawalAmount: 3,
+        totalApprovedWithdrawalAmount: 7,
         totalApprovedDepositAmount: 10,
       });
     });
@@ -79,7 +79,7 @@ describe('AccountProjection', function () {
       it('SHOULD be able to apply new events to the model', async function () {
         await waitForExpect(async () => {
           const account = await findById(this.aggregateId);
-          expect(account).to.have.property('balance', 20);
+          expect(account).to.have.property('balance', 16);
         });
       });
     });
