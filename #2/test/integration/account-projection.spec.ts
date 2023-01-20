@@ -5,6 +5,7 @@ import AccountProjection from '../../src/projection/account';
 import { AccountEvents, AggregateType } from '../../../events';
 import EventStore from '../../src/library/eventstore';
 import { expect } from 'chai';
+import { connectToDatabase } from '../../src/services/database';
 
 
 async function findById(id: string): Promise<{
@@ -21,6 +22,7 @@ async function findById(id: string): Promise<{
 describe('AccountProjection', function () {
   describe('#start', function () {
     before(async function () {
+      await connectToDatabase();
       this.eventStore = new EventStore(AccountEvents);
       this.projection = new AccountProjection(this.eventStore);
       this.aggregateId = '60329145-ba86-44fb-8fc8-519e1e427a60';
