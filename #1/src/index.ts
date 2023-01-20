@@ -47,7 +47,7 @@ export function getAccountInformation(events: typeof AccountEvents, accountId: s
       "WithdrawalCreated": () => {
         withdrawalsCreated.push(curr);
       },
-      "DepositCreated": function () {
+      "DepositCreated": () => {
         depositsCreated.push(curr);
       },
       "WithdrawalApproved": () => {
