@@ -1,8 +1,5 @@
+import { TotalApprovedAmounts } from "../../../events";
 import { Account } from "../aggregate/account";
-import { ObjectId } from "mongodb";
+import { Identifiers } from "./Identifiers";
 
-export type ObjectID = {
-    _id?: ObjectId
-}
-
-export type AccountModel = Account & ObjectId;
+export type AccountModel = Account & TotalApprovedAmounts & Partial<Identifiers>;
