@@ -10,9 +10,9 @@ export async function connectToDatabase() {
 
     const db: mongoDB.Db = client.db(process.env.DB_NAME);
 
-    const accountsCollection: mongoDB.Collection = db.collection(config.accountCollection.name);
-    const depositCreatedCollection: mongoDB.Collection = db.collection("DepositsCreated");
-    const withdrawalsCreatedCollection: mongoDB.Collection = db.collection("WithdrawalsCreated");
+    const accountsCollection: mongoDB.Collection = db.collection(config.collections.accounts.name);
+    const depositCreatedCollection: mongoDB.Collection = db.collection(config.collections.depositsCreated.name);
+    const withdrawalsCreatedCollection: mongoDB.Collection = db.collection(config.collections.withdrawalsCreated.name);
 
     collections.accounts = accountsCollection;
     collections.depositsCreated = depositCreatedCollection;

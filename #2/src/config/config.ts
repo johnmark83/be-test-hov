@@ -8,6 +8,8 @@ const MONGO_URL=`mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@cluster0.wiip
 const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 1337;
 const DB_NAME = process.env.DB_NAME ?? '';
 const ACCOUNT_COLLECTION_NAME = process.env.ACCOUNT_COLLECTION_NAME ?? '';
+const WITHDRAWALSCREATED_COLLECTION_NAME = process.env.WITHDRAWALSCREATED_COLLECTION_NAME ?? '';
+const DEPOSITSCREATED_COLLECTION_NAME = process.env.DEPOSITSCREATED_COLLECTION_NAME ?? '';
 
 export const config = {
     mongo: {
@@ -19,8 +21,16 @@ export const config = {
     database: {
         name: DB_NAME
     },
-    accountCollection: {
-        name: ACCOUNT_COLLECTION_NAME
+    collections: {
+        accounts: {
+            name: ACCOUNT_COLLECTION_NAME
+        },
+        withdrawalsCreated : {
+            name: WITHDRAWALSCREATED_COLLECTION_NAME
+        },
+        depositsCreated : {
+            name: DEPOSITSCREATED_COLLECTION_NAME
+        }
     }
 }
 
