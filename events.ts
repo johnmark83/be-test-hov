@@ -1,3 +1,17 @@
+export type UserCredentials = {
+  email: string;
+  fullName: string;
+  password: string;
+  username: string;
+};
+
+export type TotalApprovedAmounts = {
+  totalApprovedDepositAmount: number;
+  totalApprovedWithdrawalAmount: number;
+};
+
+export type AccountInformation = UserCredentials & TotalApprovedAmounts;
+
 export enum AggregateType {
   Account = 100,
   Deposit,
@@ -12,8 +26,8 @@ export type Event<T = any, B = any> = {
   body: B;
 };
 
-export type AccountCreatedEvent = Event<'AccountCreated', { username: string; fullName: string; password: string; email: string }>;
-export type AccountUpdatedEvent = Event<'AccountUpdated', { username?: string; fullName?: string; email?: string; }>;
+export type AccountCreatedEvent = Event<'AccountCreated', UserCredentials>;
+export type AccountUpdatedEvent = Event<'AccountUpdated', Partial<Omit<UserCredentials, "password">>>;
 export type CreditedEvent = Event<'BalanceCredited', { amount: number }>;
 export type DebitEvent = Event<'BalanceDebited', { amount: number }>;
 
