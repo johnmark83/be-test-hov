@@ -30,6 +30,10 @@ export type AccountCreatedEvent = Event<'AccountCreated', UserCredentials>;
 export type AccountUpdatedEvent = Event<'AccountUpdated', Partial<Omit<UserCredentials, "password">>>;
 export type CreditedEvent = Event<'BalanceCredited', { amount: number }>;
 export type DebitEvent = Event<'BalanceDebited', { amount: number }>;
+export type DepositCreated = Event<'DepositCreated', { account: string, amount: number }>;
+export type WithdrawalCreated = Event<'WithdrawalCreated', { account: string, amount: number }>;
+export type DepositApproved = Event<'DepositApproved', {}>;
+export type WithdrawalApproved = Event<'WithdrawalApproved', {}>;
 
 export const AccountEvents = [
   {
