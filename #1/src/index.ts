@@ -1,5 +1,5 @@
 import { AccountEvents } from '../../events';
-import { IAccountInformation, IEvent } from './types';
+import { IAccountInformation, IEvent } from '../../interfaces';
 
 export function calculateAccountBalance(events: typeof AccountEvents, accountId: string): number {
 

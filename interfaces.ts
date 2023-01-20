@@ -1,4 +1,4 @@
-import { AggregateType } from "../../events";
+import { AggregateType } from "./events";
 
 export interface IUserCredentials {
     email: string;
@@ -6,6 +6,7 @@ export interface IUserCredentials {
     password: string;
     username: string;
 }
+
 export interface IAccountInformation extends IUserCredentials {
     totalApprovedDepositAmount: number | 0;
     totalApprovedWithdrawalAmount: number | 0;
