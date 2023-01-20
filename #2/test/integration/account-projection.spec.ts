@@ -50,6 +50,8 @@ describe('AccountProjection', function () {
     });
 
     after(async function () {
+      await collections.depositsCreated?.deleteMany({});
+      await collections.withdrawalsCreated?.deleteMany({});
       await collections.accounts?.deleteMany({});
     });
 
