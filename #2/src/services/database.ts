@@ -1,7 +1,7 @@
 import * as mongoDB from "mongodb";
 import { config } from "../config/config";
 
-export const collections: { accounts?: mongoDB.Collection } = {};
+export const collections: { accounts?: mongoDB.Collection, depositsCreated?: mongoDB.Collection, withdrawalsCreated?: mongoDB.Collection } = {};
 
 export async function connectToDatabase() {
     const client: mongoDB.MongoClient = new mongoDB.MongoClient(config.mongo.url);
@@ -11,8 +11,10 @@ export async function connectToDatabase() {
     const db: mongoDB.Db = client.db(process.env.DB_NAME);
 
     const accountsCollection: mongoDB.Collection = db.collection(config.accountCollection.name);
+    const depositCreatedCollection: mongoDB.Collection = db.collection("DepositsCreated");
+    const withdrawalsCreatedCollection: mongoDB.Collection = db.collection("WithdrawalsCreated");
 
     collections.accounts = accountsCollection;
-
-    console.log(`Successfully connected to database: ${db.databaseName} and collection: ${accountsCollection.collectionName}`);
+    collections.depositsCreated = depositCreatedCollection;
+    collections.withdrawalsCreated = withdrawalsCreatedCollection;
 }
