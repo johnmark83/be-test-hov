@@ -41,7 +41,11 @@ export default class AccountProjection extends Projection {
         }
       },
       "AccountUpdated": async () => {
-        await collections.accounts?.findOneAndUpdate(query, { $set: event.body });
+        try {
+          await collections.accounts?.findOneAndUpdate(query, { $set: event.body });
+        } catch (error) {
+          console.error(error);
+        }
       },
       "WithdrawalCreated": async () => {
         try {
